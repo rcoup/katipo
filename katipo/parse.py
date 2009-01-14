@@ -19,7 +19,7 @@ class HtmlParser(object):
         'script' : 'src',
         'iframe' : 'src',
         'object' : 'src',
-        'link' : 'rel',
+        'link' : 'href',
         'form' : True,          # only GET forms
         'meta' : True,          # meta-refresh
         #'frameset' : True,
