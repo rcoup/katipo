@@ -37,7 +37,7 @@ class HTTPFetcherFactory(client.HTTPClientFactory):
     protocol = HTTPFetcher
     
     def __init__(self, url, headers=None):
-        client.HTTPClientFactory.__init__(self, url, headers=headers, agent="Katipo/0.1~a1 (+http://rob.coup.net.nz/)", timeout=30)
+        client.HTTPClientFactory.__init__(self, url, headers=headers, agent="Katipo/0.1~a1 (+http://code.google.com/p/katipo/wiki/Bot)", timeout=30)
         self.status = None
         self.elapsed_time = datetime.timedelta()
         self.deferred.addErrback(self._check_http_error)
