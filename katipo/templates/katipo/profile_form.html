@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Profiles - New{% endblock title %}
+
+{% block content_sidebar %}
+<ul>
+    <li><a href="/profile/">Manage Profiles</a></li>
+</ul>
+{% endblock %}
+
+{% block content_main %}
+    <h1>Edit Profile</h1>
+    
+    <form action="" method="POST">
+        {{ form.as_p }}
+        
+        <button type="submit">Save</button>
+    </form>
+{% endblock content_main %}

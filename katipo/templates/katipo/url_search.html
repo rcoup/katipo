@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}URL Search{% endblock %}
+
+{% block content_main %}
+<h1>URL Search</h1>
+
+<form action="" method="GET">
+    <label>Go to URL: <input type="text" name="url"></label>
+    <button type="submit">Go</button>
+</form>
+
+{% if search %}
+    <h2>Results for <code>{{search}}</code>:</h2>
+    
+    {% if notfound %}
+        <p class="error">Sorry, we couldn't find any matching URLs</p>
+    {% else %}
+        <h3>Exact Match</h3>
+        <ul>
+            {% if urls.exact %}
+            <li><a href="{{urls.exact.get_absolute_url}}">{{urls.exact.url}}</a> (in {{urls.exact.get_all_runs.count}} runs)</li>
+            {% else %}
+            <li class="warn">No exact match found.</li>
+            {% endif %}
+        </ul>
+    
+        <h3>Inexact Matches</h3>
+        <ul>
+        {% if urls.inexact %}
+            {% for url in urls.inexact %}
+                <li><a href="{{url.get_absolute_url}}">{{url}}</a></li>
+            {% endfor %}
+        {% else %}
+            <li class="warn">No inexact matches found.</li>
+        {% endif %}
+        </ul>
+    {% endif %}
+{% endif %}
+{% endblock content_main %}

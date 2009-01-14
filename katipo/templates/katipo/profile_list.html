@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Profiles{% endblock title %}
+
+{% block content_main %}
+    <h1>Profiles</h1>
+    
+    <table>
+        <tbody>
+            {% for o in object_list %}
+            <tr>
+                <th><a href="{{o.get_absolute_url}}">{{o}}</a></th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content_main %}
+
+{% block content_sidebar %}
+    <a href="new/">Create new Profile</a>
+{% endblock content_sidebar %}

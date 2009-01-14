@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Katipo - {% block title %}Checking your Webs{% endblock title %}</title>
+        <style type="text/css" media="all">
+            @import "http://o.aolcdn.com/dojo/1.2/dijit/themes/tundra/tundra.css";
+            @import "/site_media/katipo.css";
+        </style>
+        <script src="http://o.aolcdn.com/dojo/1.2/dojo/dojo.xd.js" type="text/javascript" djConfig="parseOnLoad:true"></script>
+        {% block head %}{% endblock head %}
+    </head>
+    <body class="tundra">
+        <div id="header">
+            <h2><a id="title_link" href="/"><img src="/site_media/logo.png">Katipo</a> - Checking your Webs</h2>
+        </div>
+        
+        <div id="main" class="content">
+            {% block content %}
+                <div id="sidebar" class="content">{% block content_sidebar %}{% endblock content_sidebar %}</div>
+                {% block content_main %}{% endblock content_main %}
+            {% endblock content %}
+        </div>
+
+        <div id="footer">
+            Powered by <a href="http://katipo.googlecode.com">Katipo</a>
+        </div>
+    </body>
+</html>

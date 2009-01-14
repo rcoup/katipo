@@ -1,0 +1,143 @@
+/* 
+ * Shamelessly stolen from:
+ * http://bluerobot.com/web/layouts/layout1.html 
+ */
+
+body {
+	margin: 0;
+	font-family:verdana, arial, helvetica, sans-serif;
+	color:#333;
+	background-color:white;
+	font:1em verdana, arial, helvetica, sans-serif;
+}
+
+#header {
+    padding: 5px 10px;
+    vertical-align: middle;
+}
+#title_link {
+    line-height: 130px;
+    padding-left: 130px;
+}
+#title_link img {
+    border: 0;
+    padding: 0;
+    margin-left: -130px;
+    vertical-align: middle;
+}
+#footer {
+    text-align: center;
+    font-size: 75%;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+h1,h2,h3,th {
+    letter-spacing: -1pt;  
+    font-weight: normal; 
+    margin: 5px 0;
+    color: #006
+}
+
+#nav {
+    margin: 5px 10px;
+    border: 1px solid black;
+    background-color: #f0f0ff;
+    position: relative;
+}
+.menu {
+    padding: 0;
+    margin: 2px 0;
+    font-size: 0.9em;
+}
+#menuRight {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: right;
+}
+.menu li {
+    display: inline;
+    border-right: 1px solid black;
+    margin: 0;
+    padding: 2px 10px;
+}
+#menuRight.menu li {
+    border-left: 1px solid black;
+    border-right: none;
+}
+.menu a,
+.menu a:visited {
+    color: #666;
+    text-decoration: none;
+}
+.menu a:active,
+.menu a:hover {
+    color: #006;
+}
+
+#content, .content {
+    padding: 10px;
+}
+#sidebar {
+    float: right;
+    width: 300px;
+    background-color: #f0f0ff;
+}
+
+.tiny {
+    font-size: 0.75em;
+}
+.detail {
+    background-color: #fffff0;
+    padding: 5px;
+    border: 1px solid #888;
+}
+.error, .errorlist {
+    color: red;
+}
+.warn, .warnlist {
+    color: darkorange;
+}
+
+TABLE {
+    border: 1px solid #888;
+    border-collapse: collapse;    
+    padding: 5px;    
+}
+TD,TH {
+    padding: 3px 20px;
+    border-width: 1px 0;
+    border-color: #888;
+    border-style: dotted;
+}
+
+PRE {
+    overflow: auto;
+}
+
+.url_list {
+    width: 100%;
+    margin: 0;
+    border: 0;
+}
+.url_list TBODY TH {
+    text-align: left;
+}
+.url_colors .url_GOOD {}
+.url_colors .url_BAD, 
+.url_colors.url_BAD a:link {
+    color: #ff0000;
+}
+.url_colors .url_ERROR, 
+.url_colors .url_ERROR a:link {
+    color: #ff8c00;
+}
+.url_colors .url_TIMEOUT,
+.url_colors .url_TIMEOUT a:link {
+    color: #ffd700;
+}
+#url_tabs {
+    height: 450px;
+    margin-top: 20px;
+}

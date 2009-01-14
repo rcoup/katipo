@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load katipo_run %}
+
+{% block title %}Run {{run}}{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <script type="text/javascript">
+        dojo.require("dijit.layout.TabContainer");
+        dojo.require("dijit.layout.ContentPane");
+    </script>
+{% endblock head %}
+
+{% block content_sidebar %}
+<form action="" method="GET">
+    {{ compare_list_form.as_p }}
+    <p><button type="submit">Update</button></p>
+</form>
+{% endblock content_sidebar %}
+
+{% block content_main %}
+<h1>Run {{run}}</h1>
+
+<table class="detail">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Value</th>
+            {% if compare_run %}<th>Change</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Profile</th>
+            <td><a href="{{run.profile.get_absolute_url}}">{{ run.profile }}</a></td>
+        </tr>
+        <tr>
+            <th>Started at</th>
+            <td>{{ run.started_at }}</td>
+        </tr>
+        <tr>
+            <th>Elapsed Time</th>
+            <td>{{ run.elapsed_time }}</td>
+            {% if compare_run %}<td><span title="{{compare_run.elapsed_time}}">{% percent_change run.get_elapsed_time_seconds compare_run.get_elapsed_time_seconds %}</span></td>{% endif %}
+        </tr>
+        <tr>
+            <th>Crawled URLs</th>
+            <td>{{ run.count_crawled }}</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_crawled}}">
+                    {% percent_change run.count_crawled compare_run.count_crawled %}
+                </span>
+            </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Ignored URLs</th>
+            <td>{{ run.count_ignored }}</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_ignored}}">
+                    {% percent_change run.count_ignored compare_run.count_ignored %}
+                </span>
+            </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Internal URLs</th>
+            <td>{{ run.count_internal }}</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_internal}}">
+                    {% percent_change run.count_internal compare_run.count_internal %}
+                </span>
+            </td>
+            {% endif %}
+            <td rowspan="2">
+                <img src="http://chart.apis.google.com/chart?cht=p3&amp;chs=300x100&amp;chd=t:{{run.count_internal}},{{run.count_external}}&amp;chl=Internal|External" />
+            </td>
+        </tr>
+        <tr>
+            <th>External URLs</th>
+            <td>{{ run.count_external }}</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_external}}">
+                    {% percent_change run.count_external compare_run.count_external %}
+                </span>
+            </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Good URLs</th>
+            <td>{{ run.count_good }} ({{ run.count_good_pc|floatformat:1 }}%)</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_good}} ({{ compare_run.count_good_pc|floatformat:1 }}%)">
+                    {% percent_change run.count_good compare_run.count_good %}
+                </span>
+            </td>
+            {% endif %}
+            <td rowspan="4">
+                <img src="http://chart.apis.google.com/chart?cht=p3&amp;chs=300x100&amp;chd=t:{{run.count_good}},{{run.count_bad}},{{run.count_errors}},{{run.count_timeouts}}&amp;chl=Good|Bad|Errors|Timeouts&amp;chco=00FF00,FF0000,FF8C00,FFD700" />
+            </td>
+        </tr>
+        <tr>
+            <th>Bad URLs</th>
+            <td>{{ run.count_bad }} ({{ run.count_bad_pc|floatformat:1 }}%)</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_bad}} ({{ compare_run.count_bad_pc|floatformat:1 }}%)">
+                    {% percent_change run.count_bad compare_run.count_bad %}
+                </span>
+            </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Error URLs</th>
+            <td>{{ run.count_errors }} ({{ run.count_errors_pc|floatformat:1 }}%)</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_errors}} ({{ compare_run.count_errors_pc|floatformat:1 }}%)">
+                    {% percent_change run.count_errors compare_run.count_errors %}
+                </span>
+            </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Timeout URLs</th>
+            <td>{{ run.count_timeouts }} ({{ run.count_timeouts_pc|floatformat:1 }}%)</td>
+            {% if compare_run %}
+            <td>
+                <span title="{{compare_run.count_timeouts}} ({{ compare_run.count_timeouts_pc|floatformat:1 }}%)">
+                    {% percent_change run.count_timeouts compare_run.count_timeouts %}
+                </span>
+            </td>
+            {% endif %} 
+        </tr>
+    </tbody>
+</table>
+
+<div dojoType="dijit.layout.TabContainer" id="url_tabs" tabStrip="true">
+    <div dojoType="dijit.layout.ContentPane" title="Bad URLs ({{run.count_bad}})" href="?result=BAD"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Error URLs ({{run.count_errors}})" href="?result=ERROR"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Timeout URLs ({{run.count_timeouts}})" href="?result=TIMEOUT"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Good URLs ({{run.count_good}})" href="?result=GOOD"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Ignored URLs ({{run.count_ignored}})" href="?result="></div>
+</div>
+{% endblock content_main %}

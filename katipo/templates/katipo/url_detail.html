@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}URL {{url}}, Run {{ url.run }}{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <script type="text/javascript">
+        dojo.require("dijit.layout.TabContainer");
+        dojo.require("dijit.layout.ContentPane");
+    </script>
+{% endblock %}
+
+{% block content_sidebar %}
+Current Run:
+<form action="" method="GET">
+    {{ run_form.as_p }}
+    <p><button type="submit">Update</button></p>
+</form>
+{% endblock content_sidebar %}
+
+{% block content_main %}
+<h1><a href="{{url.url}}">{{ url.url }}</a></h1>
+<h2>Run <a href="{{url.run.get_absolute_url}}">{{url.run}}</a></h2>
+
+<table class="detail">
+    <tbody>
+        <tr>
+            <th>Result</th>
+            <td>{{ url.get_result_display|default:"Not Crawled" }}</td>
+        </tr>
+        {% if url.result %}
+        <tr>
+            <th>Response code</th>
+            <td>{{ url.status_code }}</td>
+        </tr>
+        <tr>
+            <th>Elapsed Time</th>
+            <td>{{ url.elapsed_time }}</td>
+        </tr>
+        <tr>
+            <th>Incoming Links</th>
+            <td>{{ url.incoming_links.count }}</td>
+        </tr>
+        <tr>
+            <th>Outgoing Links</th>
+            <td>{{ url.outgoing_links.count }}</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% if url.result %}
+<div dojoType="dijit.layout.TabContainer" id="url_tabs" tabStrip="true" class="url_colors">
+    <div dojoType="dijit.layout.ContentPane" title="Incoming Links ({{url.incoming_links.all.count}})" href="?links=incoming"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Outgoing Links ({{url.outgoing_links.all.count}})" href="?links=outgoing"></div>
+</div>
+{% endif %}
+
+{% endblock content_main %}

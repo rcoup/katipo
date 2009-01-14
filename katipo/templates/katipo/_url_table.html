@@ -1,0 +1,16 @@
+<table class="url_list">
+    <thead>
+        <th>URL</th>
+        <th>Response Code</th>
+        <th>Response Time</th>
+    </thead>
+    <tbody>
+        {% for url in urls %}
+        <tr class="url_{{url.result}}">
+            <th><a href="{{ url.get_absolute_url }}">{{ url.url }}</a></th>
+            <td>{{ url.status_code }}</td>
+            <td>{{ url.elapsed_time }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
