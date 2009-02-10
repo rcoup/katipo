@@ -15,8 +15,9 @@ existing build and test systems.
 ### Requirements
 
  * Django 1.0+          - http://www.djangoproject.com/
- * Twisted 8.1.0+       - http://www.twistedmatrix.com/
+ * Twisted 8.1.0+       - http://www.twistedmatrix.com/ (specifically core, words, and names)
  * BeautifulSoup 3.0+   - http://crummy.com/software/BeautifulSoup
+ * pyOpenSSL 0.6+       - http://pyopenssl.sourceforge.net/ (for https:// sites)
 
 Currently Katipo has only been tested under Mac OS/X and Linux, but there's 
 nothing particularly OS-specific about it.
