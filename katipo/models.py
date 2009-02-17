@@ -1,8 +1,9 @@
 import urlparse
 import datetime
+import urllib
 
 from django.db import models
-from django.utils.http import urlquote
+from django.core.urlresolvers import reverse
 
 from utils.fields import PythonField, TimedeltaField
 
@@ -203,9 +204,11 @@ class Url(models.Model):
     def __unicode__(self):
         return u"%s - %s" % (self.url, self.result or 'NOT_CRAWLED')
     
-    @models.permalink
     def get_absolute_url(self):
-        return ('katipo-url-detail', (str(self.run_id), str(urlquote(self.url, '')),))
+        u = reverse('katipo-url-detail', args=(self.run_id,))
+        u += "?" 
+        u += urllib.urlencode({'u':self.url})
+        return u
     
     def get_domain(self, include_scheme=True):
         up = self.url_parts

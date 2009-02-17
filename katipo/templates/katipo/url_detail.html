@@ -51,8 +51,8 @@ Current Run:
 
 {% if url.result %}
 <div dojoType="dijit.layout.TabContainer" id="url_tabs" tabStrip="true" class="url_colors">
-    <div dojoType="dijit.layout.ContentPane" title="Incoming Links ({{url.incoming_links.all.count}})" href="?links=incoming"></div>
-    <div dojoType="dijit.layout.ContentPane" title="Outgoing Links ({{url.outgoing_links.all.count}})" href="?links=outgoing"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Incoming Links ({{url.incoming_links.all.count}})" href="?u={{url.url|urlencode}}&amp;links=incoming"></div>
+    <div dojoType="dijit.layout.ContentPane" title="Outgoing Links ({{url.outgoing_links.all.count}})" href="?u={{url.url|urlencode}}&amp;links=outgoing"></div>
 </div>
 {% endif %}
 

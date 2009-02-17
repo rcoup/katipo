@@ -42,12 +42,12 @@ def url_redirect(request, url):
     else:
         return HttpResponseRedirect(u[0].get_absolute_url())
 
-def url_detail(request, run_id, url):
-    u = get_object_or_404(Url, url=url, run=run_id)
+def url_detail(request, run_id):
+    u = get_object_or_404(Url, url=request.GET.get('u'), run=run_id)
     
     # handle requests for link-lists
-    if 'links' in request.REQUEST:
-        lt = request.REQUEST['links']
+    if 'links' in request.GET:
+        lt = request.GET['links']
         if lt == 'incoming':
             return render_to_response('katipo/_url_table.html', {'urls':u.incoming_links.all()})
         elif lt == 'outgoing':
@@ -75,12 +75,15 @@ def url_detail(request, run_id, url):
     return render_to_response('katipo/url_detail.html', ctx)
 
 def url_search(request):
+    if 'u' in request.GET:
+        return url_redirect(request, request.GET['u'])
+    
     ctx = {
         'search': False
     }
     status = 200
-    if 'url' in request.REQUEST:
-        search = request.REQUEST.get('url', '').strip()
+    if 'search' in request.REQUEST:
+        search = request.REQUEST.get('search', '').strip()
         ctx['search'] = search
         ctx['urls'] = Url.objects.search(search)
         ctx['notfound'] = not (ctx['urls']['exact'] or len(ctx['urls']['inexact']))
