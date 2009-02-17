@@ -2,6 +2,7 @@ import urlparse
 import datetime
 
 from django.db import models
+from django.utils.http import urlquote
 
 from utils.fields import PythonField, TimedeltaField
 
@@ -204,7 +205,7 @@ class Url(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('katipo-url-detail', (str(self.run_id), str(self.url),))
+        return ('katipo-url-detail', (str(self.run_id), str(urlquote(self.url, '')),))
     
     def get_domain(self, include_scheme=True):
         up = self.url_parts
