@@ -105,6 +105,12 @@ class Run(models.Model):
         return self.urls.filter(result=Url.RESULT_TIMEOUT).count()
     
     @property
+    def count_internal_pc(self):
+        return 100.0 * self.count_internal / self.count_crawled
+    @property
+    def count_external_pc(self):
+        return 100.0 * self.count_external / self.count_crawled
+    @property
     def count_good_pc(self):
         return 100.0 * self.count_good / self.count_crawled
     @property

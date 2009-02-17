@@ -76,7 +76,7 @@
             </td>
             {% endif %}
             <td rowspan="2">
-                <img src="http://chart.apis.google.com/chart?cht=p3&amp;chs=300x100&amp;chd=t:{{run.count_internal}},{{run.count_external}}&amp;chl=Internal|External" />
+                <img src="http://chart.apis.google.com/chart?cht=p3&amp;chs=300x100&amp;chd=t:{{run.count_internal_pc|floatformat:1}},{{run.count_external_pc|floatformat:1}}&amp;chl=Internal|External" />
             </td>
         </tr>
         <tr>
@@ -101,7 +101,7 @@
             </td>
             {% endif %}
             <td rowspan="4">
-                <img src="http://chart.apis.google.com/chart?cht=p3&amp;chs=300x100&amp;chd=t:{{run.count_good}},{{run.count_bad}},{{run.count_errors}},{{run.count_timeouts}}&amp;chl=Good|Bad|Errors|Timeouts&amp;chco=00FF00,FF0000,FF8C00,FFD700" />
+                <img src="http://chart.apis.google.com/chart?cht=p3&amp;chs=300x100&amp;chd=t:{{run.count_good_pc|floatformat:1}},{{run.count_bad_pc|floatformat:1}},{{run.count_errors_pc|floatformat:1}},{{run.count_timeouts_pc|floatformat:1}}&amp;chl=Good|Bad|Errors|Timeouts&amp;chco=00FF00,FF0000,FF8C00,FFD700" />
             </td>
         </tr>
         <tr>
