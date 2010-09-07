@@ -106,24 +106,28 @@ class Run(models.Model):
     def count_timeouts(self):
         return self.urls.filter(result=Url.RESULT_TIMEOUT).count()
     
+    def _percent(self, quantity):
+        # handle div/zero
+        return 100.0 * quantity / self.count_crawled if self.count_crawled else 0.0
+    
     @property
     def count_internal_pc(self):
-        return 100.0 * self.count_internal / self.count_crawled
+        return self._percent(self.count_internal)
     @property
     def count_external_pc(self):
-        return 100.0 * self.count_external / self.count_crawled
+        return self._percent(self.count_external)
     @property
     def count_good_pc(self):
-        return 100.0 * self.count_good / self.count_crawled
+        return self._percent(self.count_good)
     @property
     def count_bad_pc(self):
-        return 100.0 * self.count_bad / self.count_crawled
+        return self._percent(self.count_bad)
     @property
     def count_errors_pc(self):
-        return 100.0 * self.count_errors / self.count_crawled
+        return self._percent(self.count_errors)
     @property
     def count_timeouts_pc(self):
-        return 100.0 * self.count_timeouts / self.count_crawled
+        return self._percent(self.count_timeouts)
     
     def get_good(self):
         return self.urls.filter(result=Url.RESULT_GOOD)
