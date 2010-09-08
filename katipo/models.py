@@ -86,6 +86,9 @@ class Run(models.Model):
         return self.urls.exclude(result='').count()
     @property
     def count_ignored(self):
+        return self.urls.filter(result=Url.RESULT_IGNORED).count()
+    @property
+    def count_not_crawled(self):
         return self.urls.filter(result='').count()
     @property
     def count_internal(self):
@@ -138,9 +141,11 @@ class Run(models.Model):
     def get_timeouts(self):
         return self.urls.filter(result=Url.RESULT_TIMEOUT)
     def get_ignored(self):
+        return self.urls.filter(result=Url.RESULT_IGNORED)
+    def get_not_crawled(self):
         return self.urls.filter(result='')
     def get_all_errors(self):
-        return self.urls.exclude(result=Url.RESULT_GOOD).exclude(result='').order_by('result', 'status_code', 'url')
+        return self.urls.exclude(result__in=(Url.RESULT_GOOD, Url.RESULT_IGNORED, '')).order_by('result', 'status_code', 'url')
 
 class UrlManager(models.Manager):
     def distinct_urls(self):
@@ -181,12 +186,14 @@ class Url(models.Model):
     RESULT_BAD = 'BAD'
     RESULT_ERROR = 'ERROR'
     RESULT_TIMEOUT = 'TIMEOUT'
+    RESULT_IGNORED = 'IGNORED'
     
     CHOICES_RESULT = (
         (RESULT_GOOD, 'Good (expected status)'),
         (RESULT_BAD, 'Bad (unexpected status)'),
         (RESULT_ERROR, 'Error'),
         (RESULT_TIMEOUT, 'Timeout'),
+        (RESULT_IGNORED, 'Ignored'),
     )
     
     objects = UrlManager()

@@ -10,7 +10,7 @@ def run_detail(request, object_id):
     # handle requests for URL-lists
     if 'result' in request.REQUEST:
         r = request.REQUEST['result']
-        if r in ('ERROR', 'TIMEOUT', 'GOOD', 'BAD', ''):
+        if r in ('ERROR', 'TIMEOUT', 'GOOD', 'BAD', 'IGNORED', ''):
             qs = run.urls.filter(result=r)
             return render_to_response('katipo/_url_table.html', {'urls':qs})
         else:

@@ -94,7 +94,7 @@ class Crawler(object):
         self.re_ignore = tuple([(r, re.compile(r)) for r in ignore_match])
         self.re_content_types = tuple([(r, re.compile(r)) for r in parse_content_types_match])
         
-    def crawl(self, concurrent=5):
+    def crawl(self, concurrent=10):
         """ Call this to kick the whole thing off. """
         self.to_crawl_s = set(self.to_crawl)
         self.to_crawl = list(self.to_crawl_s)
@@ -253,6 +253,9 @@ class Crawler(object):
                 return 'regex'
         
         return True
+    
+    def was_ignored(self, url):
+        return url in self.ignored
     
     def on_fetch(self, url, status, headers, elapsed_time, content_type, outgoing_links, is_internal):
         pass

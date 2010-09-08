@@ -33,7 +33,38 @@ class Runner(object):
                     test_externals=self._profile.test_externals,
                     parse_content_types_match=self._profile.parse_content_types)
         
-        c.on_fetch = self._crawl_page_fetch
+        def _crawl_page_fetch(url, status, headers, elapsed_time, content_type, outgoing_links, is_internal):
+            ru, created = Url.objects.get_or_create(url=url, run=self._run)
+            ru.status_code=status
+            ru.elapsed_time=elapsed_time
+            ru.is_internal=is_internal
+            
+            for e_url, e_code in self._expected_errors:
+                if e_url.search(url):
+                    if status == e_code:
+                        ru.result = Url.RESULT_GOOD
+                    else:
+                        ru.result = Url.RESULT_BAD
+                    break
+            else:
+                if status >= 200 and status < 400:
+                    ru.result = Url.RESULT_GOOD
+                else:
+                    ru.result = Url.RESULT_BAD
+            
+            ru.save()
+            
+            for link in outgoing_links:
+                ol, created = Url.objects.get_or_create(url=link, run=self._run)
+                if c.was_ignored(link):
+                    ol.result = Url.RESULT_IGNORED
+                    ol.save()
+                ru.outgoing_links.add(ol)
+            
+            ru.save()
+            self.log.debug("PageFetch: Url=%d url=%s status=%s, links=%d", ru.id, url, status, len(outgoing_links))
+        
+        c.on_fetch = _crawl_page_fetch
         c.on_error = self._crawl_page_error
         
         self._run = Run(profile=self._profile, name=run_id)
@@ -50,34 +81,6 @@ class Runner(object):
         
         self.log.debug("Reactor stopped, run-status=%s", self._run.status)
         return (self._run.status == Run.STATUS_COMPLETE)
-    
-    def _crawl_page_fetch(self, url, status, headers, elapsed_time, content_type, outgoing_links, is_internal):
-        ru, c = Url.objects.get_or_create(url=url, run=self._run)
-        ru.status_code=status
-        ru.elapsed_time=elapsed_time
-        ru.is_internal=is_internal
-        
-        for e_url, e_code in self._expected_errors:
-            if e_url.search(url):
-                if status == e_code:
-                    ru.result = Url.RESULT_GOOD
-                else:
-                    ru.result = Url.RESULT_BAD
-                break
-        else:
-            if status >= 200 and status < 400:
-                ru.result = Url.RESULT_GOOD
-            else:
-                ru.result = Url.RESULT_BAD
-        
-        ru.save()
-        
-        for link in outgoing_links:
-            ol, c = Url.objects.get_or_create(url=link, run=self._run)
-            ru.outgoing_links.add(ol)
-        
-        ru.save()
-        self.log.debug("PageFetch: Url=%d url=%s status=%s, links=%d", ru.id, url, status, len(outgoing_links))
     
     def _crawl_page_error(self, url, error):
         ru, c = Url.objects.get_or_create(url=url, run=self._run)
