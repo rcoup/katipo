@@ -55,7 +55,7 @@
             {% endif %}
         </tr>
         <tr>
-            <th>Ignored URLs</th>
+            <th>Not crawled</th>
             <td>{{ run.count_ignored }}</td>
             {% if compare_run %}
             <td>
@@ -145,6 +145,6 @@
     <div dojoType="dijit.layout.ContentPane" title="Error URLs ({{run.count_errors}})" href="?result=ERROR"></div>
     <div dojoType="dijit.layout.ContentPane" title="Timeout URLs ({{run.count_timeouts}})" href="?result=TIMEOUT"></div>
     <div dojoType="dijit.layout.ContentPane" title="Good URLs ({{run.count_good}})" href="?result=GOOD"></div>
-    <div dojoType="dijit.layout.ContentPane" title="Ignored URLs ({{run.count_ignored}})" href="?result="></div>
+    <div dojoType="dijit.layout.ContentPane" title="Not crawled ({{run.count_ignored}})" href="?result="></div>
 </div>
 {% endblock content_main %}
