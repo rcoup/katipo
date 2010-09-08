@@ -139,6 +139,9 @@ class Crawler(object):
         elif url in self.in_crawl:
             self.log.debug("Skipping: %s (crawling already)", url)
             return
+        elif url in self.ignored:
+            self.log.debug("Skipping: %s (ignored)", url)
+            return
         
         self.log.debug("Fetching: %s", url)
         self.in_crawl.add(url)
@@ -202,7 +205,7 @@ class Crawler(object):
                     self.ignored.add(link)
                     continue
     
-            if link not in self.to_crawl_s and link not in self.crawled and link not in self.in_crawl:
+            if link not in self.to_crawl_s and link not in self.crawled and link not in self.in_crawl and link not in self.ignored:
                 self.to_crawl.append(link)
                 self.to_crawl_s.add(link)
         
