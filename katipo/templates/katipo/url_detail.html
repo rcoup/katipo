@@ -28,14 +28,21 @@ Current Run:
             <th>Result</th>
             <td>{{ url.get_result_display|default:"Not Crawled" }}</td>
         </tr>
-        {% if url.result %}
         <tr>
             <th>Response code</th>
-            <td>{{ url.status_code }}</td>
+            {% if url.result %}
+                <td>{{ url.status_code }}</td>
+            {% else %}
+                <td>Not crawled</td>
+            {% endif %}
         </tr>
         <tr>
             <th>Elapsed Time</th>
-            <td>{{ url.elapsed_time }}</td>
+            {% if url.result %}
+                <td>{{ url.elapsed_time }}</td>
+            {% else %}
+                <td>Not crawled</td>
+            {% endif %}
         </tr>
         <tr>
             <th>Incoming Links</th>
@@ -43,17 +50,18 @@ Current Run:
         </tr>
         <tr>
             <th>Outgoing Links</th>
-            <td>{{ url.outgoing_links.count }}</td>
+            {% if url.result %}
+                <td>{{ url.outgoing_links.count }}</td>
+            {% else %}
+                <td>Not crawled</td>
+            {% endif %}
         </tr>
-        {% endif %}
     </tbody>
 </table>
 
-{% if url.result %}
 <div dojoType="dijit.layout.TabContainer" id="url_tabs" tabStrip="true" class="url_colors">
     <div dojoType="dijit.layout.ContentPane" title="Incoming Links ({{url.incoming_links.all.count}})" href="?u={{url.url|urlencode}}&amp;links=incoming"></div>
     <div dojoType="dijit.layout.ContentPane" title="Outgoing Links ({{url.outgoing_links.all.count}})" href="?u={{url.url|urlencode}}&amp;links=outgoing"></div>
 </div>
-{% endif %}
 
 {% endblock content_main %}
