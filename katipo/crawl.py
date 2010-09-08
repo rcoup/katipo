@@ -174,7 +174,9 @@ class Crawler(object):
         
         redirects = headers.get("location", ())
         if redirects:
-            links.update(redirects)
+            if current_url_valid:
+                for r in redirects:
+                    links.add(urlparse.urljoin(url, r))
         elif self.parser:
             ct_parse = False
             for ct_s, ct_re in self.re_content_types:
