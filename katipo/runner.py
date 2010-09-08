@@ -65,7 +65,7 @@ class Runner(object):
                     ru.result = Url.RESULT_BAD
                 break
         else:
-            if status >= 200 and status < 300:
+            if status >= 200 and status < 400:
                 ru.result = Url.RESULT_GOOD
             else:
                 ru.result = Url.RESULT_BAD

@@ -37,7 +37,7 @@ class HTTPFetcherFactory(client.HTTPClientFactory):
     protocol = HTTPFetcher
     
     def __init__(self, url, headers=None):
-        client.HTTPClientFactory.__init__(self, url, headers=headers, agent="Katipo/0.1~a1 (+http://code.google.com/p/katipo/wiki/Bot)", timeout=30)
+        client.HTTPClientFactory.__init__(self, url, headers=headers, agent="Katipo/0.1~a1 (+http://code.google.com/p/katipo/wiki/Bot)", timeout=30, followRedirect=0)
         self.status = None
         self.elapsed_time = datetime.timedelta()
         self.deferred.addErrback(self._check_http_error)
@@ -171,7 +171,11 @@ class Crawler(object):
         current_url_valid = (self.check_link(url) == True)
         
         links = set()
-        if self.parser:
+        
+        redirects = headers.get("location", ())
+        if redirects:
+            links.update(redirects)
+        elif self.parser:
             ct_parse = False
             for ct_s, ct_re in self.re_content_types:
                 if ct_re.match(content_type):
@@ -182,22 +186,23 @@ class Crawler(object):
                 self.log.debug("Not parsing: %s (content_type=%s)", url, repr(content_type))
             else:
                 links = set(self.parser.extractLinks(content, url))
-                for link in links:
-                    valid = self.check_link(link)
-                    if valid != True:
-                        if valid == 'host' and self.test_externals and current_url_valid:
-                            # test external link, but it'll stop for any links generated
-                            # from that page (unless they point to one of our valid hosts).
-                            self.log.debug("Testing external link: %s", link)
-                            pass
-                        else:
-                            self.log.debug("Skipping: %s (failed link-check)", link)
-                            self.ignored.add(link)
-                            continue
-            
-                    if link not in self.to_crawl_s and link not in self.crawled and link not in self.in_crawl:
-                        self.to_crawl.append(link)
-                        self.to_crawl_s.add(link)
+
+        for link in links:
+            valid = self.check_link(link)
+            if valid != True:
+                if valid == 'host' and self.test_externals and current_url_valid:
+                    # test external link, but it'll stop for any links generated
+                    # from that page (unless they point to one of our valid hosts).
+                    self.log.debug("Testing external link: %s", link)
+                    pass
+                else:
+                    self.log.debug("Skipping: %s (failed link-check)", link)
+                    self.ignored.add(link)
+                    continue
+    
+            if link not in self.to_crawl_s and link not in self.crawled and link not in self.in_crawl:
+                self.to_crawl.append(link)
+                self.to_crawl_s.add(link)
         
         self.on_fetch(url, status, headers, elapsed_time, content_type, links, current_url_valid)
     
